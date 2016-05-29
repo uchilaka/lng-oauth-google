@@ -100,7 +100,7 @@ angular.module('lng-oauth-google', [
                                 // run request
                                 request.then(function (resp) {
                                     var o=resp.result;
-                                    if(!o.hasOwnProperty('email') && Array.isArray(o.emails)) {
+                                    if(o && !o.hasOwnProperty('email') && Array.isArray(o.emails)) {
                                         resp.result.email = o.emails[0].value;
                                     }
                                     if (angular.isFunction(authCallback)) {
