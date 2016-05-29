@@ -1,0 +1,11 @@
+{
+  "name": "larcity-ng-oauth-google",
+  "dependencies": {
+    "angular": "1.5.5",
+    "angular-cookies": "~1.5.x",
+    "a0-angular-storage": "*"
+  },
+  "resolutions": {
+    "angular": "1.5.5"
+  }
+}
