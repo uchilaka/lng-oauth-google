@@ -89,9 +89,9 @@ angular.module('lng-oauth-google', [
                         // cache access token for later
                         store.set('gapi.access_token', accessToken);
 
-                        if (angular.isFunction(authCallback))
+                        /*if (angular.isFunction(authCallback))
                             authCallback(authResult);
-                        else if (authResult && !authResult.error) {
+                        else */if (authResult && !authResult.error) {
                             gapi.client.load('plus', 'v1').then(function () {
                                 // get user information in UI
                                 var request = gapi.client.plus.people.get({
@@ -104,7 +104,7 @@ angular.module('lng-oauth-google', [
                                         authCallback(resp.result);
                                     else
                                         console.log('Google auth response:', resp.result);
-
+                                    /*
                                     // get access token
                                     gapi.auth.authorize({
                                         client_id: vars.clientId,
@@ -114,6 +114,7 @@ angular.module('lng-oauth-google', [
                                     }, function () {
                                         console.log('Google API token:', arguments);
                                     });
+                                    */
 
                                 }, function (reason) {
                                     //F7.alert(reason.result.error.message, 'Google authentication failed');
@@ -121,6 +122,7 @@ angular.module('lng-oauth-google', [
                                 });
                             });
                         } else {
+                            console.log('Google auth response ->', arguments);
                             //F7.alert(authResult.error.message, 'Google login failed!');
                             errorCallback(authResult.error.message);
                         }
