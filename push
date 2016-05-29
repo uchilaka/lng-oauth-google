@@ -1,0 +1,9 @@
+#!/bin/bash
+git add -A
+if [[ -z "$1" ]]; then
+    COMMIT_NOTE="Nothing to see here. Just updating..."
+else
+    COMMIT_NOTE="$1"
+fi
+git commit -m "$COMMIT_NOTE"
+git push origin master
