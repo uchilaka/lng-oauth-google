@@ -1,0 +1,6 @@
+BOWER REGISTRATION
+==================
+All valid semver tags on https://bitbucket.org/uchilaka_/lng-oauth-google.git will be available as versions.
+To publish a new version, just release a valid semver tag.
+
+Run `bower info lng-oauth-google` to list the available versions.
