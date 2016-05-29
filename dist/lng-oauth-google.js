@@ -2,27 +2,20 @@ var __googleLibCallback, __googleLibEmbeddedCallback;
 angular.module('lng-oauth-google', [
     'angular-storage'
 ]).factory('$googleOauthService', [
-    '$rootScope', 'store',
-    function $googleOauthServiceProvider($all, store) {
+    '$rootScope', 'store', '$timeout', 'googleConfig',
+    function $googleOauthServiceProvider($all, store, $timeout, vars) {
         console.log('[angular.module.googleOauthService]');
+
         /**
-         * use angular configuration pattern to set vars with client credentials:
+         * use angular constant (factory) pattern to set `googleConfig` as 
+         * a constant with the following struct client credentials:
          * { apiKey, clientId, scopes }
          */
-        this.updateVariables = function(variables) {
-            vars = variables;
-        };
-
-        var vars={}, 
-                accessToken,
+        var accessToken,
                 authCallback,
-                errorCallback = function(errorMessage) {
+                errorCallback = function (errorMessage) {
                     throw '$googleOauthService ERROR: ' + errorMessage;
                 },
-                getConfig = function() {
-                    return vars;
-                },
-                credentials = {},
                 __s = {
                     init: function (callback) {
                         __googleLibEmbeddedCallback = callback;
@@ -44,6 +37,12 @@ angular.module('lng-oauth-google', [
                             js.src = "https://apis.google.com/js/client.js?onload=__googleLibCallback";
                             fjs.parentNode.insertBefore(js, fjs);
                         }(document, 'script', 'google-cloud-lib'));
+                    },
+                    setErrorHandler: function (errorHandler) {
+                        errorCallback = errorHandler;
+                    },
+                    setAuthResponseHandler: function (authResponseHandler) {
+                        authCallback = authResponseHandler;
                     },
                     getAccessToken: function () {
                         return __s.getToken();
@@ -68,7 +67,7 @@ angular.module('lng-oauth-google', [
                             // refresh if less than 15 minutes is left
                             if (secondsLeft < (15 * 60)) {
                                 // refresh token (immediate:true)
-                                gapi.auth.authorize({client_id: credentials.clientId, scope: vars.scopes, immediate: true, response_type: 'token'}, __s.handleResult);
+                                gapi.auth.authorize({client_id: vars.clientId, scope: vars.scopes, immediate: true, response_type: 'token'}, __s.handleResult);
                             } else
                                 console.log('Skipping token refresh: ~' + (Math.round(secondsLeft) / 60) + ' minutes left');
                         } else
@@ -108,7 +107,7 @@ angular.module('lng-oauth-google', [
 
                                     // get access token
                                     gapi.auth.authorize({
-                                        client_id: credentials.clientId,
+                                        client_id: vars.clientId,
                                         immediate: false,
                                         response_type: 'token',
                                         scope: vars.scopes
@@ -126,14 +125,8 @@ angular.module('lng-oauth-google', [
                             errorCallback(authResult.error.message);
                         }
                     },
-                    updateCredentials: function (key) {
-                        if (vars.hasOwnProperty(key)) {
-                            console.log('Google app credentials updated!');
-                            credentials = vars[key];
-                        }
-                    },
                     getCredentials: function () {
-                        return credentials;
+                        return vars;
                     },
                     getScopes: function () {
                         // return scopes as array
@@ -142,17 +135,26 @@ angular.module('lng-oauth-google', [
                     auth: function (callback) {
                         if (angular.isFunction(callback))
                             authCallback = callback;
-                        gapi.auth.authorize({client_id: credentials.clientId, scope: vars.scopes, immediate: false, response_type: 'token'}, __s.handleResult);
+                        gapi.auth.authorize({client_id: vars.clientId, scope: vars.scopes, immediate: false, response_type: 'token'}, __s.handleResult);
                     },
-                    setErrorCallback: function (errorHandler) {
-                        errorCallback = errorHandler;
+                    login: function() {
+                        __s.auth();
                     },
-                    setAuthResponseCallback: function (authResponseHandler) {
-                        authCallback = authResponseHandler;
+                    logout: function() {
+                        // not figure out yet - lookup oauth invalidate token
+                        gapi.auth.signOut(); // https://github.com/google/google-api-javascript-client/issues/32#issuecomment-68965025
                     }
                 };
+
         // show google credentials
         console.log('Google app credentials:', vars);
+        /*
+        // show credentials if updated
+        $timeout(function () {
+            if (vars && vars.hasOwnProperty('clientId'))
+                console.log('Google app credentials (UPDATED):', vars);
+        }, 1500, 0);
+        */
         return __s;
 
     }]);
