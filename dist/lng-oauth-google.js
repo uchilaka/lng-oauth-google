@@ -90,8 +90,8 @@ angular.module('lng-oauth-google', [
                         store.set('gapi.access_token', accessToken);
 
                         /*if (angular.isFunction(authCallback))
-                            authCallback(authResult);
-                        else */if (authResult && !authResult.error) {
+                         authCallback(authResult);
+                         else */if (authResult && !authResult.error) {
                             gapi.client.load('plus', 'v1').then(function () {
                                 // get user information in UI
                                 var request = gapi.client.plus.people.get({
@@ -99,9 +99,16 @@ angular.module('lng-oauth-google', [
                                 });
                                 // run request
                                 request.then(function (resp) {
-                                    var o=resp.result;
-                                    if(o && !o.hasOwnProperty('email') && Array.isArray(o.emails)) {
-                                        resp.result.email = o.emails[0].value;
+                                    var o = resp.result;
+                                    if (o) {
+                                        if (!o.hasOwnProperty('email') && Array.isArray(o.emails)) {
+                                            resp.result.email = o.emails[0].value;
+                                        }
+                                        // parse picture
+                                        if(o.hasOwnProperty('image'))
+                                            resp.result.picture = o.image.url;
+                                        o.first_name = o.name.givenName;
+                                        o.last_name = o.name.familyName;
                                     }
                                     if (angular.isFunction(authCallback)) {
                                         authCallback(resp.result);
@@ -109,16 +116,16 @@ angular.module('lng-oauth-google', [
                                     else
                                         console.log('Google auth response:', resp.result);
                                     /*
-                                    // get access token
-                                    gapi.auth.authorize({
-                                        client_id: vars.clientId,
-                                        immediate: false,
-                                        response_type: 'token',
-                                        scope: vars.scopes
-                                    }, function () {
-                                        console.log('Google API token:', arguments);
-                                    });
-                                    */
+                                     // get access token
+                                     gapi.auth.authorize({
+                                     client_id: vars.clientId,
+                                     immediate: false,
+                                     response_type: 'token',
+                                     scope: vars.scopes
+                                     }, function () {
+                                     console.log('Google API token:', arguments);
+                                     });
+                                     */
 
                                 }, function (reason) {
                                     //F7.alert(reason.result.error.message, 'Google authentication failed');
@@ -143,10 +150,10 @@ angular.module('lng-oauth-google', [
                             authCallback = callback;
                         gapi.auth.authorize({client_id: vars.clientId, scope: vars.scopes, immediate: false, response_type: 'token'}, __s.handleResult);
                     },
-                    login: function() {
+                    login: function () {
                         __s.auth();
                     },
-                    logout: function() {
+                    logout: function () {
                         // not figure out yet - lookup oauth invalidate token
                         gapi.auth.signOut(); // https://github.com/google/google-api-javascript-client/issues/32#issuecomment-68965025
                     }
@@ -155,12 +162,12 @@ angular.module('lng-oauth-google', [
         // show google credentials
         console.log('Google app credentials:', vars);
         /*
-        // show credentials if updated
-        $timeout(function () {
-            if (vars && vars.hasOwnProperty('clientId'))
-                console.log('Google app credentials (UPDATED):', vars);
-        }, 1500, 0);
-        */
+         // show credentials if updated
+         $timeout(function () {
+         if (vars && vars.hasOwnProperty('clientId'))
+         console.log('Google app credentials (UPDATED):', vars);
+         }, 1500, 0);
+         */
         return __s;
 
     }]);
