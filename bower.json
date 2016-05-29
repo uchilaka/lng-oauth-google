@@ -1,5 +1,5 @@
 {
-  "name": "larcity-ng-oauth-google",
+  "name": "lng-oauth-google",
   "dependencies": {
     "angular": "1.5.5",
     "angular-cookies": "~1.5.x",
