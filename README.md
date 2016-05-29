@@ -5,7 +5,7 @@ This library is part of the family of LarCity JS libraries. It was written to ad
 * Provide a wrapper for Google's JS library to automatically inject the Google OAuth JS library into an AngularJS Project.
 * Easily maintain service (factory) features across LarCity projects.
 
-I aspire to be a contributing member of the  share it with you as-is, to help with your own projects.
+I aspire to be a contributing member of the Open Source Community, so I share it with you as-is, to help with your own projects.
 
 # Setting up the Example Project
 

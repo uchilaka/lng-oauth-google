@@ -9,12 +9,18 @@ angular.module('lng-oauth-google', [
          * use angular configuration pattern to set vars with client credentials:
          * { apiKey, clientId, scopes }
          */
-        this.vars = {};
+        this.updateVariables = function(variables) {
+            vars = variables;
+        };
 
-        var accessToken,
+        var vars={}, 
+                accessToken,
                 authCallback,
                 errorCallback = function(errorMessage) {
                     throw '$googleOauthService ERROR: ' + errorMessage;
+                },
+                getConfig = function() {
+                    return vars;
                 },
                 credentials = {},
                 __s = {
