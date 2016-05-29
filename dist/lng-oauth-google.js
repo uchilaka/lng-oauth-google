@@ -99,9 +99,13 @@ angular.module('lng-oauth-google', [
                                 });
                                 // run request
                                 request.then(function (resp) {
-                                    //console.log('Google auth response:', resp.result);
-                                    if (angular.isFunction(authCallback))
+                                    var o=resp.result;
+                                    if(!o.hasOwnProperty('email') && Array.isArray(o.emails)) {
+                                        resp.result.email = o.emails[0].value;
+                                    }
+                                    if (angular.isFunction(authCallback)) {
                                         authCallback(resp.result);
+                                    }
                                     else
                                         console.log('Google auth response:', resp.result);
                                     /*
