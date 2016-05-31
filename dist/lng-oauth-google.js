@@ -1,5 +1,5 @@
 var __googleLibCallback, __googleLibEmbeddedCallback;
-angular.module('lng-oauth-google', [
+angular.module('lngOauthGoogle', [
     'angular-storage'
 ]).factory('$googleOauthService', [
     '$rootScope', 'store', '$timeout', 'googleConfig',
