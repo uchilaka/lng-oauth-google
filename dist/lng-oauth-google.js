@@ -105,7 +105,7 @@ angular.module('lngOauthGoogle', [
                                             resp.result.email = o.emails[0].value;
                                         }
                                         // parse picture
-                                        if(o.hasOwnProperty('image'))
+                                        if (o.hasOwnProperty('image'))
                                             resp.result.picture = o.image.url;
                                         o.first_name = o.name.givenName;
                                         o.last_name = o.name.familyName;
@@ -115,17 +115,6 @@ angular.module('lngOauthGoogle', [
                                     }
                                     else
                                         console.log('Google auth response:', resp.result);
-                                    /*
-                                     // get access token
-                                     gapi.auth.authorize({
-                                     client_id: vars.clientId,
-                                     immediate: false,
-                                     response_type: 'token',
-                                     scope: vars.scopes
-                                     }, function () {
-                                     console.log('Google API token:', arguments);
-                                     });
-                                     */
 
                                 }, function (reason) {
                                     //F7.alert(reason.result.error.message, 'Google authentication failed');
